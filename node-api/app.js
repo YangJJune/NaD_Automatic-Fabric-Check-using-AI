@@ -37,10 +37,10 @@ app.get('/defects', async (req, res) => {
 
 
 // Define a route to get fabric information by ID
-app.get('/fabrics/:id', async (req, res) => {
-    const fabricId = req.params.id;
+app.get('/fabrics/:fabric_code', async (req, res) => {
+    const fabricId = req.params.fabric_code;
     try {
-        const [rows] = await pool.query('SELECT * FROM Fabric_information WHERE id = ?', [fabricId]);
+        const [rows] = await pool.query('SELECT * FROM Fabric_information WHERE fabric_code = ?', [fabricId]);
         if (rows.length === 0) {
             res.status(404).json({ error: 'Fabric not found' });
         } else {
@@ -52,36 +52,11 @@ app.get('/fabrics/:id', async (req, res) => {
     }
 });
 
-// Define a route to create a new fabric entry
-app.post('/fabrics', async (req, res) => {
-    const fabricData = req.body;
-    try {
-        await pool.query('INSERT INTO Fabric_information SET ?', [fabricData]);
-        res.status(201).json({ message: 'Fabric added successfully' });
-    } catch (error) {
-        console.error('Error creating fabric entry:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Define a route to update fabric information by ID
-app.put('/fabrics/:id', async (req, res) => {
-    const fabricId = req.params.id;
-    const updatedData = req.body;
-    try {
-        await pool.query('UPDATE Fabric_information SET ? WHERE id = ?', [updatedData, fabricId]);
-        res.json({ message: 'Fabric updated successfully' });
-    } catch (error) {
-        console.error('Error updating fabric information:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
 // Define a route to delete fabric information by ID
-app.delete('/fabrics/:id', async (req, res) => {
-    const fabricId = req.params.id;
+app.delete('/fabrics-delete/:fabric_code', async (req, res) => {
+    const fabricId = req.params.fabric_code;
     try {
-        await pool.query('DELETE FROM Fabric_information WHERE id = ?', [fabricId]);
+        await pool.query('DELETE FROM Fabric_information WHERE fabric_code = ?', [fabricId]);
         res.json({ message: 'Fabric deleted successfully' });
     } catch (error) {
         console.error('Error deleting fabric information:', error);
@@ -91,10 +66,10 @@ app.delete('/fabrics/:id', async (req, res) => {
 
 
 // Define a route to get defect information by ID
-app.get('/defect/:id', async (req, res) => {
-    const fabricId = req.params.id;
+app.get('/defect/:defect_code', async (req, res) => {
+    const fabricId = req.params.defect_code;
     try {
-        const [rows] = await pool.query('SELECT * FROM Defect_information WHERE id = ?', [fabricId]);
+        const [rows] = await pool.query('SELECT * FROM Defect_information WHERE defect_code = ?', [fabricId]);
         if (rows.length === 0) {
             res.status(404).json({ error: 'Defect not found' });
         } else {
@@ -108,10 +83,10 @@ app.get('/defect/:id', async (req, res) => {
 
 
 // Define a route to delete defect information by ID
-app.delete('/defect/:id', async (req, res) => {
-    const fabricId = req.params.id;
+app.delete('/defect-delete/:defect_code', async (req, res) => {
+    const defectfId = req.params.defect_code;
     try {
-        await pool.query('DELETE FROM Defect_information WHERE id = ?', [fabricId]);
+        await pool.query('DELETE FROM Defect_information WHERE defect_code = ?', [fabricId]);
         res.json({ message: 'Fabric deleted successfully' });
     } catch (error) {
         console.error('Error deleting defect information:', error);
