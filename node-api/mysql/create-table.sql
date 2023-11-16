@@ -7,7 +7,7 @@ CREATE TABLE Fabric_information (
     total_tests INT,
     defects_detected INT,
     scan_start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    test_end_time TIMESTAMP,
+    test_end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     image_path VARCHAR(100),
     status ENUM('running', 'complete') DEFAULT 'running'
 );
