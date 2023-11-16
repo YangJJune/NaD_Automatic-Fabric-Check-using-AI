@@ -20,9 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".moreErrorsActivity"></activity>
-        <activity android:name=".errorsActivity"></activity>
-        <activity android:name=".InfoActivity"></activity>
+        <activity android:name=".moreErrorsActivity"
+            android:parentActivityName=".errorsActivity">
+
+        </activity>
+        <activity android:name=".errorsActivity"
+            android:parentActivityName=".InfoActivity">
+
+        </activity>
+        <activity android:name=".InfoActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

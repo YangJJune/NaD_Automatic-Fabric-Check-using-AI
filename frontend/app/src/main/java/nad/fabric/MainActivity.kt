@@ -11,7 +11,7 @@ import nad.fabric.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val pw = listOf("1234")
-    val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
