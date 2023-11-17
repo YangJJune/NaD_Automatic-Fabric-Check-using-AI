@@ -52,7 +52,7 @@ app.get('/fabrics/:fabric_code', async (req, res) => {
     }
 });
 
-// Define a route to delete fabric information by ID
+// Define a route to delete fabric information by ID (필요없음)
 app.delete('/fabrics-delete/:fabric_code', async (req, res) => {
     const fabricId = req.params.fabric_code;
     try {
@@ -82,7 +82,7 @@ app.get('/defect/:defect_code', async (req, res) => {
 });
 
 
-// Define a route to delete defect information by ID
+// Define a route to delete defect information by ID (필요없음)
 app.delete('/defect-delete/:defect_code', async (req, res) => {
     const defectfId = req.params.defect_code;
     try {
@@ -95,7 +95,70 @@ app.delete('/defect-delete/:defect_code', async (req, res) => {
 });
 
 
+// Create a route (2번쩨 화면 사용)
+app.get('/defect-2', async (req, res) => {
+    const sql = `
+      SELECT
+        f.fabric_code,
+        d.defect_code,
+        d.defect_type,
+        f.scan_start_time,
+        f.test_end_time,
+        f.total_test_time,
+        f.status,
+        (f.defects_detected / f.total_tests) * 100 AS performance
+      FROM
+        fabric_information f
+      LEFT JOIN
+        Defect_information d
+      ON
+        f.fabric_code = d.fabric_code
+    `;
+
+    try {
+        const [rows] = await pool.query(sql);
+        res.json(rows);
+    } catch (error) {
+        console.error('Error fetching defect information:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+// Define a route (3번쩨 화면)
+app.get('/defect-3', async (req, res) => {
+    const sql = `
+      SELECT
+        d.defect_code,
+        d.defect_type,
+        d.x_coordinate,
+        d.y_coordinate,
+        f.scan_start_time
+      FROM
+        Defect_information d
+      LEFT JOIN
+        fabric_information f
+      ON
+        f.fabric_code = d.fabric_code
+    `;
+
+    try {
+        const [rows] = await pool.query(sql);
+        res.json(rows);
+    } catch (error) {
+        console.error('Error fetching defect details:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
+
 const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
