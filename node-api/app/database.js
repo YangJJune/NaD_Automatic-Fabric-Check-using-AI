@@ -9,19 +9,22 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+//all data reading
+
 export async function getFabric(){
-    const[rows] = await pool.query("SELECT * FROM Fabric_information")
+    const[rows] = await pool.query("SELECT * FROM fabric_information")
     return rows
 }
 
 
-const result = await pool.query("SELECT * FROM Fabric_information")
+const result = await pool.query("SELECT * FROM fabric_information")
 const rows = result[0]
 console.log(rows)
 
 
-const result2 = await pool.query("SELECT * FROM Defect_information")
+const result2 = await pool.query("SELECT * FROM fefect_information")
 const rows2 = result2[0]
 console.log(rows2)
+
 
 
