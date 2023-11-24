@@ -55,7 +55,9 @@ class InfoActivity: AppCompatActivity() {
             this@InfoActivity.runOnUiThread {
                 infoAdapter.itemClickListener = object: fabricAdapter.OnItemClickListener{
                     override fun OnItemClick(fData: fabricData) {
-                        Toast.makeText(this@InfoActivity,fData.id,Toast.LENGTH_SHORT).show()
+                        val tmpIntent = Intent(this@InfoActivity,moreErrorsActivity::class.java)
+                        tmpIntent.putExtra("fabric_id", fData.id)
+                        launcher.launch(tmpIntent)
                     }
                 }
                 binding.infoView.adapter = infoAdapter

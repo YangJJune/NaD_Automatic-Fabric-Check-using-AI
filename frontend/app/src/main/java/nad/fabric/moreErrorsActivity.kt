@@ -2,8 +2,14 @@ package nad.fabric
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import nad.fabric.databinding.ActivityInfoBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import nad.fabric.databinding.ActivityMoreErrorsBinding
+import org.json.JSONArray
+import org.jsoup.Jsoup
 
 class moreErrorsActivity: AppCompatActivity() {
     lateinit var binding: ActivityMoreErrorsBinding
@@ -14,6 +20,26 @@ class moreErrorsActivity: AppCompatActivity() {
 
         binding.button2.setOnClickListener {
             finish()
+        }
+        binding.defectView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val fabricArr = arrayListOf<fabricData>()
+        CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).async {
+                val jsonArr = JSONArray(
+                    Jsoup.connect("http://49.173.62.69:3000/fabrics").ignoreContentType(true).get()
+                        .body().text()
+                )
+                for (i: Int in 0 until jsonArr.length()) {
+                    val j = jsonArr.getJSONObject(i)
+                    val fCode = j.getString("fabric_id")
+                    val total = j.getInt("total_count")
+                    val defects = j.getInt("defect_count")
+                    var date = j.getString("scan_start_time")
+                    date = date.replace('T', ' ')
+                    date = date.substring(0, 16)
+                    fabricArr.add(fabricData(fCode, date, defects, total))
+                }
+            }.await()
         }
         setContentView(binding.root)
 
