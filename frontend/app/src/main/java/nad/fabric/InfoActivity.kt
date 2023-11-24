@@ -40,11 +40,12 @@ class InfoActivity: AppCompatActivity() {
                 val jsonArr = JSONArray(Jsoup.connect("http://49.173.62.69:3000/fabrics").ignoreContentType(true).get().body().text())
                 for(i:Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)
-                    val fCode = j.getString("fabric_code")
-                    val total = j.getInt("total_tests")
-                    val defects = j.getInt("defects_detected")
-                    val date = j.getString("scan_start_time")
-
+                    val fCode = j.getString("fabric_id")
+                    val total = j.getInt("total_count")
+                    val defects = j.getInt("defect_count")
+                    var date = j.getString("scan_start_time")
+                    date = date.replace('T',' ')
+                    date = date.substring(0,16)
                     fabricArr.add(fabricData(fCode, date, defects, total))
                 }
             }.await()
