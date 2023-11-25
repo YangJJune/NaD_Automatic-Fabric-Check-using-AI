@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+from PIL import Image
 import json
 import argparse
 import requests
@@ -9,20 +10,25 @@ model = YOLO("./best.pt")
 parser = argparse.ArgumentParser()
 parser.add_argument("image_path", help="path to image")
 args = parser.parse_args()
+image = Image.open(args.image_path)
 
-result = model(args.image_path)
+result = model(image)
 json_result = result[0].tojson()
 
 parsed_json = json.loads(json_result)
+
+
 
 # Pretty-print the JSON
 pretty_json = json.dumps(parsed_json, indent=2)
 print(pretty_json)
 
-print(len(parsed_json))
+# print(len(parsed_json))
 # create json for server
 server_json = []
 for i in range(len(parsed_json)):
+    cropped_defect = image.crop((parsed_json[i]['box']['x1'], parsed_json[i]['box']['y1'], parsed_json[i]['box']['x2'], parsed_json[i]['box']['y2']))
+    cropped_defect.save("./" + args.image_path + "_" + str(i) + ".jpg")
     server_json.append({
         "parent_fabric": args.image_path,
         "issue_name": parsed_json[i]['name'],
