@@ -15,6 +15,14 @@ image = Image.open(args.image_path)
 result = model(image)
 json_result = result[0].tojson()
 
+#save the cropped images
+result[0].save_crop("./" + args.image_path + "_crop")
+
+
+im_array = result[0].plot()
+im = Image.fromarray(im_array[..., ::-1])
+# im.show()
+im.save("./" + args.image_path + "_result.jpg")
 parsed_json = json.loads(json_result)
 
 
@@ -27,8 +35,8 @@ print(pretty_json)
 # create json for server
 server_json = []
 for i in range(len(parsed_json)):
-    cropped_defect = image.crop((parsed_json[i]['box']['x1'], parsed_json[i]['box']['y1'], parsed_json[i]['box']['x2'], parsed_json[i]['box']['y2']))
-    cropped_defect.save("./" + args.image_path + "_" + str(i) + ".jpg")
+    # cropped_defect = image.crop((parsed_json[i]['box']['x1'], parsed_json[i]['box']['y1'], parsed_json[i]['box']['x2'], parsed_json[i]['box']['y2']))
+    # cropped_defect.save("./" + args.image_path + "_" + str(i) + ".jpg")
     server_json.append({
         "parent_fabric": args.image_path,
         "issue_name": parsed_json[i]['name'],
