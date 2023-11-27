@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,11 +19,10 @@ import org.jsoup.Jsoup
 class InfoActivity: AppCompatActivity() {
     lateinit var binding: ActivityInfoBinding
     val fabricArr = arrayListOf<fabricData>()
+    val search_fabricArr = arrayListOf<fabricData>()
     val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityInfoBinding.inflate(layoutInflater)
         initLayout()
@@ -34,6 +34,9 @@ class InfoActivity: AppCompatActivity() {
         }
         binding.button2.setOnClickListener {
             finish()
+        }
+        binding.searchBar.addTextChangedListener {
+            Log.d("Test",it.toString())
         }
 
         binding.infoView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
