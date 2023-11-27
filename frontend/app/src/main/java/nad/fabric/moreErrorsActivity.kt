@@ -36,18 +36,21 @@ class moreErrorsActivity: AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).async {
                 val jsonArr = JSONArray(
+
                     Jsoup.connect("http://49.173.62.69:3000/defects/"+fabric_id).ignoreContentType(true).get()
+
                         .body().text()
                 )
                 for (i: Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)
+
                     val id = j.getString("defect_code")
                     val issueName = j.getString("issue_name")
                     val imagePath = j.getString("image_path")
                     var date = j.getString("timestamp")
                     date = date.replace('T', ' ')
                     date = date.substring(0, 16)
-                    defectArr.add(defectData(id, date, issueName, imagePath))
+                    defectArr.add(defectData(id, date, issueName, imagePath,0f,0f,"test"))
                 }
                 Log.d("test", defectArr.toString())
             }.await()
@@ -57,7 +60,6 @@ class moreErrorsActivity: AppCompatActivity() {
             }
         }
         setContentView(binding.root)
-
     }
     fun initLayout(){
 

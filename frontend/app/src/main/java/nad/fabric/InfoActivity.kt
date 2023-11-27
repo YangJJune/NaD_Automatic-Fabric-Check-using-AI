@@ -17,6 +17,7 @@ import org.jsoup.Jsoup
 
 class InfoActivity: AppCompatActivity() {
     lateinit var binding: ActivityInfoBinding
+    val fabricArr = arrayListOf<fabricData>()
     val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
     }
@@ -28,25 +29,33 @@ class InfoActivity: AppCompatActivity() {
         binding.button3.setOnClickListener {
             //val tmpIntent = Intent(this, errorsActivity::class.java)
             //launcher.launch(tmpIntent)
+            fabricArr.reverse()
+            binding.infoView.adapter!!.notifyDataSetChanged()
         }
         binding.button2.setOnClickListener {
             finish()
         }
 
         binding.infoView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val fabricArr = arrayListOf<fabricData>()
+
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).async {
                 val jsonArr = JSONArray(Jsoup.connect("http://49.173.62.69:3000/fabrics").ignoreContentType(true).get().body().text())
+                fabricArr.sortBy {
+                    it.date
+                }
                 for(i:Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)
                     val fCode = j.getString("fabric_id")
                     val total = j.getInt("total_count")
                     val defects = j.getInt("defect_count")
                     var date = j.getString("scan_start_time")
+                    val complete_date:String? = j.getString("complete_time")
+                    Log.d("complete_time",complete_date.toString())
+                    val image_path:String? = j.getString("image_path")
                     date = date.replace('T',' ')
                     date = date.substring(0,16)
-                    fabricArr.add(fabricData(fCode, date, defects, total))
+                    fabricArr.add(fabricData(fCode, date, defects, total, complete_date, image_path))
                 }
             }.await()
 
