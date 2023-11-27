@@ -1,5 +1,6 @@
 package nad.fabric
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +30,16 @@ class fabricAdapter(val data:ArrayList<fabricData>): RecyclerView.Adapter<fabric
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.dateView.text = data[position].date
+
+        Log.d("test",data[position].completeDate.toString())
+        if(data[position].completeDate.toString().equals("null")){
+            holder.binding.dateView.text = data[position].completeDate
+            holder.binding.imageView4.setImageResource(R.drawable.baseline_hourglass_top_24)
+        }
+        else{
+            holder.binding.dateView.text = data[position].date
+        }
+
         holder.binding.idView.text = data[position].id
         holder.binding.defectView.text = data[position].d_cnt.toString()
         holder.binding.totalView.text = data[position].total_cnt.toString()
