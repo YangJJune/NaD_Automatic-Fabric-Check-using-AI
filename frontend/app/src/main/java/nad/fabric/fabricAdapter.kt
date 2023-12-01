@@ -37,16 +37,21 @@ class fabricAdapter(val data:ArrayList<fabricData>): RecyclerView.Adapter<fabric
 
         Log.d("test",data[position].completeDate.toString())
         if(data[position].completeDate.toString().equals("null")){
-            holder.binding.dateView.text = data[position].completeDate
+            holder.binding.dateView.text = data[position].date
             holder.binding.imageView4.setImageResource(R.drawable.baseline_hourglass_top_24)
         }
         else{
-            holder.binding.dateView.text = data[position].date
+            holder.binding.dateView.text = data[position].completeDate
+            if(data[position].d_cnt<=5) {
+                holder.binding.imageView4.setImageResource(R.drawable.baseline_check_24)
+            }else{
+                holder.binding.imageView4.setImageResource(R.drawable.baseline_warning_24)
+            }
         }
         holder.binding.idView.text = data[position].id
         holder.binding.defectView.text = String.format("%.2f",(data[position].d_cnt.toDouble()/(91.44).toDouble()))
         holder.binding.totalView.text = String.format("%.2f",(data[position].total_cnt.toDouble()/(91.44).toDouble()))
-        Glide.with(parentView).load("http://49.173.62.69:8080/20231124_130338.jpg").into(holder.binding.imageView5)//data[position].image_path).into()
+        Glide.with(parentView).load("http://49.173.62.69:8080/"+data[position].image_path).into(holder.binding.imageView5)//).into()
         holder.binding.eRateView.text = String.format("%.2f",(data[position].d_cnt.toDouble() / data[position].total_cnt.toDouble())*100) + "%"
     }
 }

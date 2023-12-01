@@ -3,6 +3,7 @@ package nad.fabric
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +16,8 @@ import org.jsoup.Jsoup
 
 class moreErrorsActivity: AppCompatActivity() {
     lateinit var binding: ActivityMoreErrorsBinding
+    val defectArr = arrayListOf<defectData>()
+    val searchArr = arrayListOf<defectData>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMoreErrorsBinding.inflate(layoutInflater)
@@ -23,9 +26,25 @@ class moreErrorsActivity: AppCompatActivity() {
         binding.button2.setOnClickListener {
             finish()
         }
+        binding.button3.setOnClickListener {
+            defectArr.reverse()
+            binding.defectView.adapter!!.notifyDataSetChanged()
+        }
+
+        binding.searchBar.addTextChangedListener {
+            searchArr.clear()
+            for(i in 0 until defectArr.size){
+                if(defectArr.get(i).issue_name.contains(binding.searchBar.text) ||
+                        defectArr.get(i).date.contains(binding.searchBar.text)){
+                    searchArr.add(defectArr.get(i))
+                }
+            }
+            binding.defectView.adapter = defectAdapter(searchArr)
+            binding.defectView.adapter!!.notifyDataSetChanged()
+        }
 
         binding.defectView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val defectArr = arrayListOf<defectData>()
+
         var fabric_id:String = ""
         if(intent.hasExtra("fabric_id")){
             fabric_id = intent.getStringExtra("fabric_id").toString()
@@ -36,10 +55,7 @@ class moreErrorsActivity: AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).async {
                 val jsonArr = JSONArray(
-
-                    Jsoup.connect("http://49.173.62.69:3000/defect_fabric_parent/"+fabric_id).ignoreContentType(true).get()
-
-                        .body().text()
+                    Jsoup.connect("http://49.173.62.69:3000/defect_fabric_parent/"+fabric_id).ignoreContentType(true).get().body().text()
                 )
                 for (i: Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)

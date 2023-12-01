@@ -19,7 +19,7 @@ import org.jsoup.Jsoup
 class InfoActivity: AppCompatActivity() {
     lateinit var binding: ActivityInfoBinding
     val fabricArr = arrayListOf<fabricData>()
-    val search_fabricArr = arrayListOf<fabricData>()
+    val searchArr = arrayListOf<fabricData>()
     val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,15 @@ class InfoActivity: AppCompatActivity() {
             finish()
         }
         binding.searchBar.addTextChangedListener {
-            Log.d("Test",it.toString())
+            searchArr.clear()
+            for(i in 0 until fabricArr.size){
+                if(fabricArr.get(i).id.contains(binding.searchBar.text) ||
+                    fabricArr.get(i).date.contains(binding.searchBar.text)){
+                    searchArr.add(fabricArr.get(i))
+                }
+            }
+            binding.infoView.adapter = fabricAdapter(searchArr)
+            binding.infoView.adapter!!.notifyDataSetChanged()
         }
 
         binding.infoView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
