@@ -37,20 +37,23 @@ class moreErrorsActivity: AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).async {
                 val jsonArr = JSONArray(
 
-                    Jsoup.connect("http://49.173.62.69:3000/defects/"+fabric_id).ignoreContentType(true).get()
+                    Jsoup.connect("http://49.173.62.69:3000/defect_fabric_parent/"+fabric_id).ignoreContentType(true).get()
 
                         .body().text()
                 )
                 for (i: Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)
-
+                    Log.d("defect", j.toString())
                     val id = j.getString("defect_code")
+                    val parent = j.getInt("parent_fabric")
+                    val x = j.getDouble("x")
+                    val y = j.getDouble("y")
                     val issueName = j.getString("issue_name")
                     val imagePath = j.getString("image_path")
                     var date = j.getString("timestamp")
                     date = date.replace('T', ' ')
                     date = date.substring(0, 16)
-                    defectArr.add(defectData(id, date, issueName, imagePath,0f,0f,"test"))
+                    defectArr.add(defectData(id, parent.toString(), date, issueName,x.toFloat(),y.toFloat(), imagePath))
                 }
                 Log.d("test", defectArr.toString())
             }.await()
