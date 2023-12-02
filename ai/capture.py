@@ -29,7 +29,7 @@ session.quit()
 print('complete sending file '+str)
 
 server_json= {
-		"image_path": str+'.jpg'
+	"image_path": str+'.jpg'
 }
 
 pretty_json = json.dumps(server_json)
