@@ -37,7 +37,7 @@ print(pretty_json)
 # create json for server
 
 
-def remove_adjacant_coords(parsed_json):
+def remove_adjacent_coords(parsed_json):
     if len(parsed_json) == 0:
         return parsed_json
     else:
@@ -48,9 +48,11 @@ def remove_adjacant_coords(parsed_json):
                 < 10
             ):
                 parsed_json.remove(parsed_json[i + 1])
-                remove_adjacant_coords(parsed_json)
+                remove_adjacent_coords(parsed_json)
         return parsed_json
 
+
+parsed_json = remove_adjacent_coords(parsed_json)
 
 if len(parsed_json) == 0:
     url = "http://49.173.62.69:3000/ok-fabric/" + args.parent_code
