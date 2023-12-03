@@ -27,7 +27,7 @@ class chartActivity : AppCompatActivity() {
     lateinit var scatteredChart: ScatterChart
     lateinit var binding: ActivityChartBinding
     val defectArr = arrayListOf<defectData>()
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -120,7 +120,12 @@ class chartActivity : AppCompatActivity() {
         val values1: ArrayList<Entry> = ArrayList()
         val values2: ArrayList<Entry> = ArrayList()
         val values3: ArrayList<Entry> = ArrayList()
-        val fabric_id = intent.getStringExtra("id")
+        val fabric = intent.getSerializableExtra("fabric") as fabricData
+        val fabric_id = fabric.id
+        binding.idView3.text = fabric.id
+        binding.dateView3.text = fabric.date
+        binding.defectView3.text = fabric.d_cnt.toString()
+        binding.totalView3.text = String.format("%.2f",(fabric.total_cnt.toDouble()/(91.44).toDouble()))
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).async {
                 val jsonArr = JSONArray(Jsoup.connect("http://49.173.62.69:3000/defect_fabric_parent/"+fabric_id).ignoreContentType(true).get().body().text())
@@ -160,7 +165,7 @@ class chartActivity : AppCompatActivity() {
             set1.scatterShapeHoleRadius = 3f
 
             // on below line we are setting color for our set
-            set1.setColor(ColorTemplate.COLORFUL_COLORS[1])
+            set1.setColor(Color.RED)
 
             // on below line we are setting
             // shape size for all sets
@@ -181,7 +186,7 @@ class chartActivity : AppCompatActivity() {
             set2.scatterShapeHoleRadius = 3f
 
             // on below line we are setting color for our set
-            set2.setColor(ColorTemplate.COLORFUL_COLORS[1])
+            set2.setColor(Color.BLUE)
 
             // on below line we are setting
             // shape size for all sets
@@ -202,7 +207,7 @@ class chartActivity : AppCompatActivity() {
             set3.scatterShapeHoleRadius = 3f
 
             // on below line we are setting color for our set
-            set3.setColor(ColorTemplate.COLORFUL_COLORS[1])
+            set3.setColor(Color.GREEN)
 
             // on below line we are setting
             // shape size for all sets

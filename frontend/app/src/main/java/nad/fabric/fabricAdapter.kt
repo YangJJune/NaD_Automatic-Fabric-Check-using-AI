@@ -65,9 +65,9 @@ class fabricAdapter(val data:ArrayList<fabricData>): RecyclerView.Adapter<fabric
             }
         }
         holder.binding.idView.text = data[position].id
-        holder.binding.defectView.text = String.format("%.2f",(data[position].d_cnt.toDouble()/(91.44).toDouble()))
+        holder.binding.defectView.text = data[position].d_cnt.toString()
         holder.binding.totalView.text = String.format("%.2f",(data[position].total_cnt.toDouble()/(91.44).toDouble()))
         Glide.with(parentView).load("http://49.173.62.69:8080/"+data[position].image_path).into(holder.binding.imageView5)//).into()
-        holder.binding.eRateView.text = String.format("%.2f",(data[position].d_cnt.toDouble() / data[position].total_cnt.toDouble())*100) + "%"
+        holder.binding.eRateView.text = String.format("%.2f",(data[position].d_cnt.toDouble() / (data[position].total_cnt.toDouble()/(91.44).toDouble())))
     }
 }

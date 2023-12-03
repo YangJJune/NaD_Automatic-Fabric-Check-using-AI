@@ -94,7 +94,7 @@ class InfoActivity: AppCompatActivity() {
                 infoAdapter.chartClickListener = object: fabricAdapter.OnChartClickListener{
                     override fun onChartClick(fData: fabricData) {
                         val tmpIntent = Intent(this@InfoActivity, chartActivity::class.java)
-                        tmpIntent.putExtra("id", fData.id)
+                        tmpIntent.putExtra("fabric", fData)
                         launcher.launch(tmpIntent)
                     }
 
