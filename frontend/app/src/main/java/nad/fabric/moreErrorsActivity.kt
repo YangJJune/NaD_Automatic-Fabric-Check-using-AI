@@ -59,7 +59,6 @@ class moreErrorsActivity: AppCompatActivity() {
                 )
                 for (i: Int in 0 until jsonArr.length()) {
                     val j = jsonArr.getJSONObject(i)
-                    Log.d("defect", j.toString())
                     val id = j.getString("defect_code")
                     val parent = j.getInt("parent_fabric")
                     val x = j.getDouble("x")

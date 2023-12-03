@@ -61,11 +61,15 @@ class InfoActivity: AppCompatActivity() {
                     val total = j.getInt("total_count")
                     val defects = j.getInt("defect_count")
                     var date = j.getString("scan_start_time")
-                    val complete_date:String? = j.getString("complete_time")
+                    var complete_date:String? = j.getString("complete_time")
                     Log.d("complete_time",complete_date.toString())
                     val image_path:String? = j.getString("image_path")
                     date = date.replace('T',' ')
                     date = date.substring(0,16)
+                    if (complete_date != null) {
+                        complete_date = complete_date.replace('T',' ')
+                        complete_date = complete_date.substring(0,16)
+                    }
                     fabricArr.add(fabricData(fCode, date, defects, total, complete_date, image_path))
                 }
             }.await()
@@ -79,6 +83,21 @@ class InfoActivity: AppCompatActivity() {
                         tmpIntent.putExtra("fabric_id", fData.id)
                         launcher.launch(tmpIntent)
                     }
+                }
+                infoAdapter.imageClickListener = object: fabricAdapter.OnLongClickListener{
+                    override fun onItemLongClick(fData: fabricData) {
+                        val tmpIntent = Intent(this@InfoActivity, imageActivity::class.java)
+                        tmpIntent.putExtra("image_path", fData.image_path)
+                        launcher.launch(tmpIntent)
+                    }
+                }
+                infoAdapter.chartClickListener = object: fabricAdapter.OnChartClickListener{
+                    override fun onChartClick(fData: fabricData) {
+                        val tmpIntent = Intent(this@InfoActivity, chartActivity::class.java)
+                        tmpIntent.putExtra("id", fData.id)
+                        launcher.launch(tmpIntent)
+                    }
+
                 }
                 binding.infoView.adapter = infoAdapter
             }
