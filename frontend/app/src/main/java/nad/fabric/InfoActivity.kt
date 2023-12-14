@@ -66,7 +66,7 @@ class InfoActivity: AppCompatActivity() {
                     val image_path:String? = j.getString("image_path")
                     date = date.replace('T',' ')
                     date = date.substring(0,16)
-                    if (complete_date != null) {
+                    if (complete_date!!.length>=16) {
                         complete_date = complete_date.replace('T',' ')
                         complete_date = complete_date.substring(0,16)
                     }
